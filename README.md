@@ -1,56 +1,82 @@
-# Welcome to your Expo app 👋
+# 今日一记（Daily Note）
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+一款极简个人文字记录应用。所有内容仅保存在设备本地，无需注册登录，也不依赖网络。
 
-## Get started
+- **技术栈**：React Native + Expo SDK 58 + Expo Router + TypeScript
+- **目标平台**：Android（同时支持 iOS 与 Web）
+- **数据存储**：`@react-native-async-storage/async-storage`（本地持久化）
 
-1. Install dependencies
+## 功能
 
-   ```bash
-   npm install
-   ```
+- 首页记录列表（标题、摘要、更新时间），支持滚动与空状态
+- 新增 / 编辑记录（标题 + 正文，中文输入与多行文本支持）
+- 记录详情（完整内容、创建 / 更新时间）
+- 删除记录（带确认提示）
+- 关于页面（应用信息、版本号、隐私政策入口、意见反馈）
+- 隐私政策页面
+- 本地数据损坏时的安全错误处理（不静默覆盖）
 
-2. Start the app
+## 环境要求
 
-   ```bash
-   npx expo start
-   ```
+- Node.js 20 或更高版本（推荐 22 LTS / 24）
+- npm
+- 真机测试：Android 手机 + Expo Go，或 Android Studio 模拟器
+- 打包发布：Expo 账号（用于 EAS Build）
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## 安装与启动
 
 ```bash
-npm run reset-project
+npm install        # 安装依赖
+npx expo start     # 启动开发服务器
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+启动后在终端中按：
 
-### Other setup steps
+- `a` → Android 模拟器
+- `w` → 浏览器
+- 手机安装 **Expo Go** 后扫描二维码（需同一局域网；不通则加 `--tunnel`）
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+> 提示：项目使用了 `@react-native-async-storage/async-storage` 等原生模块。
+> 在 Expo Go 中遇到原生模块缺失时，请使用开发构建：
+> `npx expo run:android`（首次会自动生成 `android/` 并编译，需 Android SDK）。
 
-## Learn more
+## 常用命令
 
-To learn more about developing your project with Expo, look at the following resources:
+| 命令 | 说明 |
+| --- | --- |
+| `npm run typecheck` | TypeScript 类型检查 |
+| `npm run lint` | ESLint 检查 |
+| `npm test` | 核心存储逻辑单元测试 |
+| `npx expo-doctor` | 依赖与配置诊断 |
+| `npm run icons` | 重新生成占位应用图标 |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 项目结构
 
-## Join the community
+```
+src/
+  app/                 # 路由页面（Expo Router 文件路由）
+    _layout.tsx        # 根布局（Stack + 主题 + 状态栏）
+    index.tsx          # 首页：记录列表
+    editor.tsx         # 新增 / 编辑记录
+    note/[id].tsx      # 记录详情
+    about.tsx          # 关于
+    privacy.tsx        # 隐私政策
+  components/          # 可复用 UI 组件
+  constants/           # 主题、颜色、应用常量
+  hooks/               # 主题与颜色方案 hooks
+  services/            # 数据模型与本地存储
+  types/               # TypeScript 类型
+  utils/               # 日期格式化等工具
+tests/                 # 单元测试
+docs/                  # 测试清单、发布流程、隐私政策
+```
 
-Join our community of developers creating universal apps.
+## 构建与发布
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+见 [docs/release-process.md](docs/release-process.md)。简要说明：
+
+- **内部测试 APK**：`npx eas-cli build --profile preview --platform android`
+- **正式发布 AAB**：`npx eas-cli build --profile production --platform android`
+
+> 首次构建需要登录 Expo 账号（`npx eas-cli login`）并完成 Android 签名凭据配置。
+
