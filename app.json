@@ -11,7 +11,7 @@
       "icon": "./assets/expo.icon"
     },
     "android": {
-      "package": "com.example.dailynote",
+      "package": "com.zhaojingnan.dailynote",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#208AEF",
