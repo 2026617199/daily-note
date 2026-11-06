@@ -9,6 +9,7 @@ import {
     APP_DISPLAY_NAME,
     APP_ENGLISH_NAME,
     FEEDBACK_EMAIL,
+    ICP_FILING_NUMBER,
 } from '@/constants/app-config';
 import { Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
@@ -32,6 +33,14 @@ export default function AboutScreen() {
             }
         } catch {
             Alert.alert('无法打开邮箱', `请通过 ${FEEDBACK_EMAIL} 与我们联系。`);
+        }
+    };
+
+    const openFilingLookup = async () => {
+        try {
+            await Linking.openURL('https://beian.miit.gov.cn/');
+        } catch {
+            Alert.alert('无法打开备案查询', '请稍后重试。');
         }
     };
 
@@ -84,6 +93,15 @@ export default function AboutScreen() {
             <ThemedText themeColor="textSecondary" type="small" style={styles.copyright}>
                 © 2026 {APP_DISPLAY_NAME}
             </ThemedText>
+            <Pressable
+                accessibilityRole="link"
+                accessibilityLabel={`工信部备案号 ${ICP_FILING_NUMBER}`}
+                onPress={openFilingLookup}
+                style={({ pressed }) => [styles.filingLink, pressed && styles.pressed]}>
+                <ThemedText themeColor="textSecondary" type="small">
+                    {ICP_FILING_NUMBER}
+                </ThemedText>
+            </Pressable>
         </ScrollView>
     );
 }
@@ -130,6 +148,10 @@ const styles = StyleSheet.create({
     },
     copyright: {
         textAlign: 'center',
-        marginTop: Spacing.four,
+        marginTop: Spacing.two,
+    },
+    filingLink: {
+        alignSelf: 'center',
+        paddingVertical: Spacing.one,
     },
 });

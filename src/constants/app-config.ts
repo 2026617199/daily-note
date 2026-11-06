@@ -4,4 +4,5 @@
  */
 export const APP_DISPLAY_NAME = '今日一记';
 export const APP_ENGLISH_NAME = 'Daily Note';
-export const FEEDBACK_EMAIL = 'feedback@example.com';
+export const FEEDBACK_EMAIL = '2026617199@qq.com';
+export const ICP_FILING_NUMBER = '浙ICP备2026090682号-2A';
